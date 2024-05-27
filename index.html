@@ -423,30 +423,34 @@
             progressBar.style.width = progress + '%';
             progressBar.innerText = Math.round(progress) + '%';
         }
+function saveSettings() {
+    const ipAddress = document.getElementById('ipAddress').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-        function saveSettings() {
-            const ipAddress = document.getElementById('ipAddress').value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    sessionStorage.setItem('username', username);
+    sessionStorage.setItem('password', password);
 
-            sessionStorage.setItem('username', username);
-            sessionStorage.setItem('password', password);
-
-            $.ajax({
-                type: 'POST',
-                url: 'https://alsaadxx12.github.io/tools/Devices/SaveSettings',
-                data: { ipAddress, username, password },
-                beforeSend: () => updateProgressBar(0),
-                success: response => {
-                    if (response.success) {
-                        alert('Settings saved successfully.');
-                        $('#settingsModal').modal('hide');
-                        updateDeviceTable(response.devices);
-                    } else alert('Error saving settings: ' + response.message);
-                },
-                error: () => alert('Error saving settings.')
-            });
+    $.ajax({
+        type: 'POST',
+        url: 'https://github.com/alsaadxx12/tools/SaveSettings', // استخدم عنوان URL الصحيح هنا
+        data: { ipAddress, username, password },
+        beforeSend: () => updateProgressBar(0),
+        success: response => {
+            if (response.success) {
+                alert('Settings saved successfully.');
+                $('#settingsModal').modal('hide');
+                updateDeviceTable(response.devices);
+            } else {
+                alert('Error saving settings: ' + response.message);
+            }
+        },
+        error: (xhr, status, error) => {
+            console.error('Error:', status, error); // لعرض تفاصيل الخطأ
+            alert('Error saving settings.');
         }
+    });
+}
 
         function searchDevices() { /* Add search functionality */ }
         function clearDevices() {
