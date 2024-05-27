@@ -428,29 +428,28 @@ function saveSettings() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
+    // تخزين البيانات في Session Storage
+    sessionStorage.setItem('ipAddress', ipAddress);
     sessionStorage.setItem('username', username);
     sessionStorage.setItem('password', password);
 
-    $.ajax({
-        type: 'POST',
-        url: 'https://github.com/alsaadxx12/tools/SaveSettings', // استخدم عنوان URL الصحيح هنا
-        data: { ipAddress, username, password },
-        beforeSend: () => updateProgressBar(0),
-        success: response => {
-            if (response.success) {
-                alert('Settings saved successfully.');
-                $('#settingsModal').modal('hide');
-                updateDeviceTable(response.devices);
-            } else {
-                alert('Error saving settings: ' + response.message);
-            }
-        },
-        error: (xhr, status, error) => {
-            console.error('Error:', status, error); // لعرض تفاصيل الخطأ
-            alert('Error saving settings.');
-        }
-    });
+    // عرض رسالة تأكيد
+    alert('Settings saved successfully.');
+    $('#settingsModal').modal('hide');
 }
+
+function loadSettings() {
+    const ipAddress = sessionStorage.getItem('ipAddress') || '';
+    const username = sessionStorage.getItem('username') || '';
+    const password = sessionStorage.getItem('password') || '';
+
+    document.getElementById('ipAddress').value = ipAddress;
+    document.getElementById('username').value = username;
+    document.getElementById('password').value = password;
+}
+
+// تحميل الإعدادات عند فتح الصفحة
+document.addEventListener('DOMContentLoaded', loadSettings);
 
         function searchDevices() { /* Add search functionality */ }
         function clearDevices() {
